@@ -1,3 +1,4 @@
+
 import imaplib
 import email
 from email.header import decode_header
@@ -125,3 +126,8 @@ if __name__ == "__main__":
         print(f"[!] Login failed: {e}")
     except Exception as e:
         print(f"[!] Error: {e}")
+
+thsi script helps to identify the email good or bad
+
+
+
