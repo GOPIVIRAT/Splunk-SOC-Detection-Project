@@ -9,9 +9,9 @@ from bs4 import BeautifulSoup
 
 # ---------------------- CONFIG ----------------------
 IMAP_SERVER = "imap.gmail.com"
-EMAIL_ACCOUNT = "gopisiddamsetty@gmail.com"  # ← Replace with your Gmail address
-EMAIL_PASSWORD = "wdpa laqy rpyf uavw"    # ← Replace with your Gmail App Password
-VIRUSTOTAL_API_KEY = "49de7eeaa064446a3a9bc36ea84eaf874be1b6154ec69a98c5ec5ddac9a944a2"  # ← Replace with your VT API Key (optional)
+EMAIL_ACCOUNT = "your@gmail.com"  # ← Replace with your Gmail address
+EMAIL_PASSWORD = "************"    # ← Replace with your Gmail App Password
+VIRUSTOTAL_API_KEY = "****************"  # ← Replace with your VT API Key (optional)
 NUM_EMAILS_TO_CHECK = 20
 # ----------------------------------------------------
 
