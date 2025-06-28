@@ -1,0 +1,38 @@
+# 📌 Title: Suspicious File Creation in Sensitive Directories
+# 📝 Description: Detects creation of potentially malicious scripts or binaries (.ps1, .exe, .dll, .vbs, .js) in suspicious directories like Temp, AppData, and ProgramData. Helps detect malware drops or staging.
+# 🧠 MITRE ATT&CK Technique: 
+- T1204 – User Execution  
+- T1059 – Command and Scripting Interpreter
+# 🏷️ Tags: file_creation, sysmon, suspicious_files, malware_staging, EventID_11
+# 👨‍💻 Author: Siddamsetty Gopi
+
+index=* source="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventID=11
+| eval 
+    file_path=lower(TargetFilename),
+    file_name=mvindex(split(file_path, "\\"), -1)
+| where match(file_path, "(\\\\temp\\\\|\\\\appdata\\\\|\\\\programdata\\\\)")  
+| where like(file_name, "%.ps1") OR 
+      like(file_name, "%.exe") OR 
+      like(file_name, "%.dll") OR 
+      like(file_name, "%.vbs") OR 
+      like(file_name, "%.js")
+| table _time, host, TargetFilename, Image
+| sort -_time
+
+# 🧾 Explanation:
+
+#### 🛠️ How it Works:
+- Looks for **Sysmon Event ID 11** (file creation)
+- Filters files written in **Temp, AppData, ProgramData** directories
+- Flags files with **risky extensions** like `.exe`, `.ps1`, `.dll`, `.js`, `.vbs`
+- These directories are often used to drop or hide **malicious payloads**
+
+#### ✅ Why It’s Useful:
+- Detects early stages of malware infection (file dropped but not yet run)
+- Helps identify tools/scripts that **bypass AV** and hide in user folders
+- Works well as an **early detection alert**
+
+#### 👨‍💻 Analyst Tip:
+- Cross-reference `Image` field to find the process that created the file
+- Combine with **Process Creation (Event ID 1)** to trace attack chain
+- Add filters for **file size or known safe processes** to reduce false alerts

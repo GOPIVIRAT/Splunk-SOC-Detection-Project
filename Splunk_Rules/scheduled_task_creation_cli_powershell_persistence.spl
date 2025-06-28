@@ -1,0 +1,30 @@
+# 📌 Title: Persistence via Scheduled Task Creation – CLI & PowerShell
+# 📝 Description: Detects scheduled task creation using either `schtasks.exe` (CLI) or PowerShell commands (`Register-ScheduledTask`, `New-ScheduledTaskAction`). These are common persistence techniques used by attackers to maintain access after initial compromise.
+# 🧠 MITRE ATT&CK Technique:
+- T1053.005 – Scheduled Task/Job: Scheduled Task
+# 🏷️ Tags: persistence, scheduled_task, schtasks, powershell, T1053.005, sysmon, EventID_1
+# 👨‍💻 Author: Siddamsetty Gopi
+
+index=* source="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventID=1
+(Image="*\\schtasks.exe" OR CommandLine="*Register-ScheduledTask*" OR CommandLine="*New-ScheduledTaskAction*")
+| table _time, host, User, Image, CommandLine, ParentImage
+| sort -_time
+
+# 🧾 Explanation:
+
+#### 🛠️ How it Works:
+- Monitors **Sysmon Event ID 1** for process creation
+- Flags if:
+  - `schtasks.exe` is used (typical CLI method)
+  - PowerShell includes keywords like `Register-ScheduledTask` or `New-ScheduledTaskAction`
+
+#### ✅ Why It’s Useful:
+- Scheduled tasks are a **low-noise persistence method**
+- Used by malware to **auto-run payloads** on boot or on a schedule
+- Captures both **command-line** and **PowerShell abuse**
+
+#### 👨‍💻 Analyst Tip:
+- Combine this rule with alerts for:
+  - File drops in system folders (Event ID 11)
+  - Script or binary execution via PowerShell
+  - Unusual `ParentImage` like from Word or Excel

@@ -1,0 +1,50 @@
+# 📌 Title: Suspicious PowerShell Execution with Obfuscation or Network Access
+# 📝 Description: Detects PowerShell execution using suspicious flags or obfuscation techniques like 'EncodedCommand', 'IEX', 'Bypass', or usage of WebClient. These are common in malware, phishing payloads, or in-memory attacks.
+# 🧠 MITRE ATT&CK Techniques:
+- T1059.001 – PowerShell  
+- T1027 – Obfuscated Files or Information  
+- T1105 – Ingress Tool Transfer
+# 🏷️ Tags: powershell, obfuscation, encoded_command, iex, bypass, downloader, sysmon, EventID_1
+# 👨‍💻 Author: Siddamsetty Gopi
+
+index=* source="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventID=1 Image=*powershell.exe*
+| eval cmd=lower(CommandLine)
+| search 
+    cmd="*encodedcommand*" OR 
+    cmd="*iex*" OR 
+    cmd="*bypass*" OR
+    cmd="*webclient*"
+| eval match_type=case(
+    match(cmd,"encodedcommand"), "Base64",
+    match(cmd,"iex"), "Invoke-Expression",
+    match(cmd,"bypass"), "ExecutionPolicy Bypass",
+    match(cmd,"webclient"), "Net.WebClient Downloader",
+    1=1, "Other")
+| table _time, host, user, ParentImage, CommandLine, match_type
+
+# 🧾 Explanation:
+
+#### 🛠️ How it Works:
+- Looks for **PowerShell executions** (Sysmon Event ID 1).
+- Converts the command line to lowercase for easier matching.
+- Flags PowerShell scripts that use:
+  - `encodedCommand` → base64 encoded payloads
+  - `iex` → dynamically runs code (used in malware)
+  - `bypass` → ignores execution policies
+  - `webclient` → downloads from internet
+- Uses `eval match_type` to label the technique being used.
+
+#### ✅ Why It’s Useful:
+- Detects **obfuscated or hidden PowerShell usage**, often seen in:
+  - Phishing attacks
+  - Malware dropper scripts
+  - Fileless or in-memory attacks
+- Prevents attackers from abusing PowerShell stealthily.
+
+#### 👨‍💻 Analyst Tip:
+- Combine this with:
+  - File drops in suspicious paths (Event ID 11)
+  - Network connections (Event ID 3)
+  - Unusual parent processes (like `winword.exe`, `excel.exe`)
+- This rule is **great for early detection of malicious scripting tools** used in post-exploitation.
+

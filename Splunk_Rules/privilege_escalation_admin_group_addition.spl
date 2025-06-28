@@ -1,0 +1,32 @@
+# 📌 Title: Privilege Escalation – User Added to Administrators Group
+# 📝 Description: Detects when a user is added to the "Administrators" group, which can indicate privilege escalation by an attacker or unauthorized insider.
+# 🧠 MITRE ATT&CK Technique: T1069.001 – Permission Group Discovery: Local Groups
+# 🏷️ Tags: privilege_escalation, EventCode_4732, administrators_group, access_control, windows_security
+# 👨‍💻 Author: Siddamsetty Gopi
+
+index=* source="WinEventLog:Security" EventCode=4732 Group_Name="Administrators"
+| eval Target_User=coalesce(Member_Name, TargetUserName)
+| eval Admin_Adder=coalesce(Subject_Account_Name, SubjectUserName)
+| eval Time=strftime(_time, "%Y-%m-%d %H:%M:%S")
+| table Time, Target_User, Group_Name, Admin_Adder, host
+| sort -Time
+
+# 🧾 Explanation:
+
+#### 🛠️ How it Works:
+- Searches for **EventCode 4732**, which logs when a user is added to a security group
+- Filters for `Group_Name="Administrators"` only (ignores other groups like "Users")
+- Extracts:
+  - `Target_User`: who got admin rights
+  - `Admin_Adder`: who performed the action
+  - `Time`: when it happened
+- Sorted by latest events for quick alert visibility
+
+#### ✅ Why it's Better:
+- Filters out noise from irrelevant group additions
+- Ensures field extraction is reliable (`coalesce` handles missing values)
+- Makes alert email or dashboard easy to read by SOC analyst
+
+#### 👨‍💻 Analyst Tip:
+- If this happens during off-hours or by unexpected users (e.g., non-IT), it should trigger **immediate investigation**
+- Consider alerting **only outside business hours** using cron in the alert settings

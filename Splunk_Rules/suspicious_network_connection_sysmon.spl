@@ -1,0 +1,52 @@
+# 📌 Title: Suspicious Outbound Network Connection – Abnormal Ports or Temp-Originating Process
+# 📝 Description: Detects processes making outbound network connections from suspicious directories (Temp/AppData) or to non-standard ports/IPs, excluding common safe applications. Helps catch reverse shells or malware C2 traffic.
+# 🧠 MITRE ATT&CK Technique: T1071 – Application Layer Protocol | T1105 – Ingress Tool Transfer | T1219 – Remote Access Software
+# 🏷️ Tags: sysmon, EventID_3, network_connection, anomaly, post_exploitation, C2
+# 👨‍💻 Author: Siddamsetty Gopi
+
+index=* source="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventID=3
+| eval lower_image=lower(Image)
+| where DestinationIp!="127.0.0.1" AND DestinationIp!="::1"
+| where (
+    (
+        like(lower_image, "%\\temp\\%") OR 
+        like(lower_image, "%\\appdata\\%") OR 
+        DestinationPort IN ("4444", "8080", "1337", "3389", "5985", "9001", "6666")
+    )
+    AND NOT match(lower_image, ".*(notion|grammarly|chrome|firefox|teams|onedrive|zoom|edge|spotify|vlc).*")
+)
+OR (
+    NOT cidrmatch("10.0.0.0/8", DestinationIp)
+    AND NOT cidrmatch("192.168.0.0/16", DestinationIp)
+    AND NOT cidrmatch("172.16.0.0/12", DestinationIp)
+    AND NOT match(lower_image, ".*(notion|grammarly|chrome|firefox|teams|onedrive|zoom|edge|spotify|vlc).*")
+)
+| table 
+    _time,
+    host,
+    user,
+    Image,
+    DestinationIp,
+    DestinationPort,
+    SourcePort,
+    Initiated
+| sort -_time
+
+# 🧾 Explanation:
+
+#### 🛠️ How it Works:
+- Uses **Sysmon Event ID 3**, which logs network connections
+- Filters for connections:
+  - Made from suspicious paths like `%temp%` or `%appdata%`
+  - OR made to **non-standard ports** (common in malware shells)
+  - OR going **outside internal ranges** (public IPs)
+- Excludes popular benign applications like browsers or productivity tools
+
+#### ✅ Why it's Effective:
+- Catches reverse shells (like `msfvenom`, `nc`, `ncat`) that often spawn from `%temp%` or `%appdata%`
+- Detects malware communicating with **C2 servers**, even if file name is changed
+- Avoids noise from legitimate software with smart `match()` exclusions
+
+#### 👨‍💻 Analyst Tip:
+- Use this rule with **real-time alerts or dashboards** in environments where AppData/Temp connections are rare
+- You can enrich this with GeoIP info using `iplocation(DestinationIp)` for country context

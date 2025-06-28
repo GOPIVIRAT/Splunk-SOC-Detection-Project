@@ -1,0 +1,30 @@
+# 📌 Title: Persistence via Startup Folder File Drop – Executable or Script Detected
+# 📝 Description: Detects executable or script files (.exe, .bat, .ps1, .vbs) written to the Windows Startup folder. This is a common persistence technique that ensures the dropped file executes at every user login.
+# 🧠 MITRE ATT&CK Technique:
+- T1547.001 – Boot or Logon Autostart Execution: Startup Folder
+# 🏷️ Tags: persistence, startup_folder, file_drop, autorun, T1547.001, sysmon, EventID_11
+# 👨‍💻 Author: Siddamsetty Gopi
+
+index=* source="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventID=11
+TargetFilename="*\\Microsoft\\Windows\\Start Menu\\Programs\\Startup\\*"
+| eval file_path=lower(TargetFilename), file_name=mvindex(split(file_path, "\\"), -1)
+| where like(file_name, "%.exe") OR like(file_name, "%.bat") OR like(file_name, "%.vbs") OR like(file_name, "%.ps1")
+| table _time, host, Image, TargetFilename, User
+| sort -_time
+
+# 🧾 Explanation:
+
+#### 🛠️ How it Works:
+- Uses **Sysmon Event ID 11** to detect file creation
+- Filters for paths targeting the **Startup folder**
+- Matches files with **risky extensions** like `.exe`, `.ps1`, `.bat`, and `.vbs`
+- These files will auto-run when a user logs in, establishing persistence
+
+#### ✅ Why It’s Useful:
+- Easy to detect early-stage persistence by malware, RATs, or pentesters
+- Attackers love this technique because it requires **no elevated privileges**
+- Common in phishing payloads and USB-based attacks
+
+#### 👨‍💻 Analyst Tip:
+- Cross-reference the process that dropped the file (check `Image` field)
+- Combine with file hash, VT check, or rare parent processes to reduce false positives

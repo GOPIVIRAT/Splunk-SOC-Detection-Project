@@ -1,0 +1,31 @@
+# 📌 Title: Office Macro Execution via PowerShell, CMD, WScript, or Mshta
+# 📝 Description: Detects suspicious child processes (PowerShell, CMD, WScript, Mshta) spawned by Microsoft Office apps like Word or Excel. This behavior is commonly associated with macro-based attacks and phishing payloads.
+# 🧠 MITRE ATT&CK Techniques:
+- T1203 – Exploitation for Client Execution  
+- T1059 – Command and Scripting Interpreter  
+- T1566.001 – Phishing: Spearphishing Attachment  
+- T1133 – External Remote Services (via mshta or script execution)
+# 🏷️ Tags: office_macro, phishing, powershell, mshta, cmd, execution_chain, sysmon, EventID_1
+# 👨‍💻 Author: Siddamsetty Gopi
+
+index=* host="DESKTOP-UKJ4CF3" source="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventID=1
+(ParentImage="*\\winword.exe" OR ParentImage="*\\excel.exe")
+(Image="*\\powershell.exe" OR Image="*\\cmd.exe" OR Image="*\\wscript.exe" OR Image="*\\mshta.exe")
+| table _time, host, ParentImage, Image, CommandLine, User
+| sort -_time
+
+# 🧾 Explanation:
+
+#### 🛠️ How it Works:
+- Looks for Office apps (`winword.exe`, `excel.exe`) launching suspicious child processes
+- Common payload droppers: `powershell.exe`, `cmd.exe`, `mshta.exe`, `wscript.exe`
+- These are often launched by **malicious macros** embedded in `.doc` or `.xls` attachments
+
+#### ✅ Why It’s Useful:
+- Detects **macro-based execution chains** (used in Emotet, QBot, Dridex, etc.)
+- Helps stop initial access via phishing attachments
+- Gives visibility into Office process behavior — especially **LOLBins** abuse
+
+#### 👨‍💻 Analyst Tip:
+- Combine with file creation (`Event ID 11`) or network connection (`Event ID 3`) to confirm malicious activity
+- Watch for unknown `User` values or uncommon Office behavior during off-hours

@@ -1,0 +1,46 @@
+# 📌 Title: Remote Thread Injection – Suspicious Access to Critical Processes
+# 📝 Description: Detects attempts to create threads in sensitive processes like lsass.exe, svchost.exe, or explorer.exe, which may indicate credential dumping, session hijacking, or malware injection.
+# 🧠 MITRE ATT&CK Techniques:
+- T1055.001 – Process Injection: Dynamic-link Library Injection
+- T1055 – Process Injection (General)
+# 🏷️ Tags: process_injection, lsass, svchost, credential_access, T1055, sysmon, EventID_8
+# 👨‍💻 Author: Siddamsetty Gopi
+
+index=* source="WinEventLog:Microsoft-Windows-Sysmon/Operational" EventID=8
+| eval target_proc=lower(TargetImage), source_proc=lower(SourceImage)
+| search 
+    target_proc IN ("*\\lsass.exe", "*\\svchost.exe", "*\\explorer.exe")
+    AND NOT source_proc IN ("*\\services.exe", "*\\winlogon.exe")
+| eval injection_type=case(
+    match(target_proc,"lsass"), "Credential Theft (LSASS)",
+    match(target_proc,"svchost"), "Service Impersonation",
+    match(target_proc,"explorer"), "User Session Hijacking",
+    1=1, "Other Process Injection")
+| table 
+    _time,
+    host,
+    user,
+    source_proc,
+    target_proc,
+    injection_type,
+    StartModule,
+    StartFunction
+| sort -_time
+
+# 🧾 Explanation:
+
+#### 🛠️ How it Works:
+- Uses **Sysmon Event ID 8 (CreateRemoteThread)**  
+- Flags attempts where one process injects a thread into:
+  - `lsass.exe` → Credential dumping
+  - `svchost.exe` → Service-level impersonation
+  - `explorer.exe` → Hijacking interactive session
+- Filters out normal Windows services like `services.exe`, `winlogon.exe`
+
+#### ✅ Why It’s Useful:
+- Detects **stealthy malware techniques** like mimikatz, Cobalt Strike, etc.
+- Focuses on **critical target processes** typically abused in attacks
+
+#### 👨‍💻 Analyst Tip:
+- Check for rare `source_proc` processes injecting into `lsass.exe`
+- Correlate with Event ID 1 (process execution) or Event ID 10 (process access)

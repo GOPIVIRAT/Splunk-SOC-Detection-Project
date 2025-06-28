@@ -1,0 +1,15 @@
+# 📌 Title: Failed Login Attempt – Multiple Logon Failures for a Single Account
+# 📝 Description: Detects 5 or more failed login attempts (EventCode 4625) for the same user account from a single host. May indicate brute-force or password-guessing attempts.
+# 🧠 MITRE ATT&CK Technique: T1110 – Brute Force
+# 🏷️ Tags: brute_force, failed_login, EventCode_4625, authentication, windows_security
+# 👨‍💻 Author: Siddamsetty Gopi
+
+index=* host="DESKTOP-UKJ4CF3" source="WinEventLog:Security" EventCode=4625
+| stats count by Account_Name
+| search Account_Name="DELL"
+| where count >= 5
+
+Explanation:
+# 🧾 Explanation:
+# This rule checks if there are 5 or more failed logins for the same account.
+# It helps detect brute-force attacks where someone tries many wrong passwords.
