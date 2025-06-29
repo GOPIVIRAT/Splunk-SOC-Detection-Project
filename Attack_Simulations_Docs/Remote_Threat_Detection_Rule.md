@@ -1,4 +1,4 @@
-# 📥 remote threat
+# Remote Threat Detection Rule
 
 **Purpose:**  
 Detects PowerShell commands used to download & execute payloads remotely.
