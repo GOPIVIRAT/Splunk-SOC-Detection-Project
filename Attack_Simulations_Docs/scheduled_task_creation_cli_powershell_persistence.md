@@ -1,4 +1,4 @@
-# ⚠️ Malicious File Execution from Temp Folder
+# ⚠️ scheduled_task_creation_cli_powershell_persistence
 
 **Purpose:**  
 Detects execution of executables from `Temp` directory — a common malware behavior.
