@@ -9,4 +9,5 @@ Detects file drop into Windows startup folder to achieve persistence.
 - Alert on suspicious file drop in that path
 
 **Screenshot:**  
+![Image](https://github.com/user-attachments/assets/53d1a624-e53d-43a8-97ab-02832f1ee4a5)
 
