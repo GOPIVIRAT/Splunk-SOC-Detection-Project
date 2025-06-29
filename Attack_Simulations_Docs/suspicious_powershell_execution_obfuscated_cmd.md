@@ -8,5 +8,7 @@ Detects encoded, obfuscated, or suspicious PowerShell commands.
 - Log should capture Sysmon Event ID 1
 - Detect via command-line pattern matching
 
-**Screenshot:**  
+**Screenshot:** 
+
+![Image](https://github.com/user-attachments/assets/3f595a7c-a676-4b50-8a6f-4e9a271b2453)  
 
