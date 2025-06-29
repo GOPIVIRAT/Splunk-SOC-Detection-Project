@@ -9,4 +9,4 @@ Detects malware or droppers writing files to Temp or AppData.
 - Trigger alert on suspicious file names or locations
 
 **Screenshot:**  
-
+![Image](https://github.com/user-attachments/assets/f8c012fb-ecee-4cf6-9d9f-e8e68fa2c28c) 
