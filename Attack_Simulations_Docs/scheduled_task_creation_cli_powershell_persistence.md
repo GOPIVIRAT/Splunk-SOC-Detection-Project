@@ -9,4 +9,5 @@ Detects execution of executables from `Temp` directory — a common malware beha
 - Monitor via Sysmon Event ID 1 and EventCode 4688
 
 **Screenshot:**  
+![Image](https://github.com/user-attachments/assets/db082135-81a2-4d85-9fe1-8b105100b9bf) 
 
