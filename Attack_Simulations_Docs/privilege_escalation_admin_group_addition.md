@@ -9,4 +9,4 @@ Detects unauthorized user being added to Administrator group.
 - Verify detection alert triggers
 
 **Screenshot:**  
-
+![Image](https://github.com/user-attachments/assets/edd62081-fcde-454f-9936-f4d2e511f734)
