@@ -9,3 +9,5 @@ Detects Office macros executing suspicious PowerShell/MSHTA commands.
 - Rule triggered on Sysmon Process Creation or CommandLine
 
 **Screenshot:**  
+
+![Image](https://github.com/user-attachments/assets/e5feb8a7-4bcc-4407-ae32-2010f5601c73)
