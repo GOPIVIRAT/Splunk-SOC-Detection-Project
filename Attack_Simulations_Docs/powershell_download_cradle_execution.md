@@ -1,4 +1,4 @@
-# 📥 PowerShell Download Cradle Execution
+# 📥 remote threat
 
 **Purpose:**  
 Detects PowerShell commands used to download & execute payloads remotely.
@@ -9,4 +9,5 @@ Detects PowerShell commands used to download & execute payloads remotely.
 - Trigger via Sysmon Event ID 1 (Process Creation)
 
 **Screenshot:**  
+![Image](https://github.com/user-attachments/assets/1c2c760e-b4bf-4c81-833e-d76d9dbb7e19) 
 
