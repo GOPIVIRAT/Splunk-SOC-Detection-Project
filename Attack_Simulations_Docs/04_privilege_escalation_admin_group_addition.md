@@ -26,5 +26,5 @@ Target group is Administrators
 ![Image](https://github.com/user-attachments/assets/edd62081-fcde-454f-9936-f4d2e511f734)
 
 
-# onclusion:
+# Conclusion:
 This rule helps detect sneaky privilege escalation attempts by attackers. It’s important for stopping lateral movement and blocking attacker persistence inside the network.
