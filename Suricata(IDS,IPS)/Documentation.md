@@ -50,9 +50,9 @@ This simulates the reconnaissance phase of an attack.
 After scanning, Suricata generated alerts for suspicious connections.
 Splunk ingested the logs, showing evidence of a port scan attack.
 
-<img width="1283" height="618" alt="Image" src="https://github.com/user-attachments/assets/155c0f64-a2ad-4390-8b16-78f7bbce1745" /> find ports alert 
+<img width="1283" height="618" alt="Image" src="https://github.com/user-attachments/assets/155c0f64-a2ad-4390-8b16-78f7bbce1745" /> 
 
-<img width="854" height="534" alt="Image" src="https://github.com/user-attachments/assets/19ec1e72-74de-461c-a1e9-f03c8a825228" /> rdp port scan
+<img width="854" height="534" alt="Image" src="https://github.com/user-attachments/assets/19ec1e72-74de-461c-a1e9-f03c8a825228" /> 
 
 
 **🛠️ Step 5: SSH Brute Force Attack Simulation**
@@ -73,6 +73,7 @@ Suricata generated alerts for brute force attempts, which were visible in Splunk
 If credentials were wrong → multiple failed login attempts.
 
 <img width="1336" height="606" alt="Image" src="https://github.com/user-attachments/assets/31cb23e9-149d-462b-9d2e-bbc3e9b36577" /> 
+
 **Detection:**
 
 <img width="1299" height="426" alt="Image" src="https://github.com/user-attachments/assets/e8af6416-96bd-46e7-a685-e330f20007c2" /> 
