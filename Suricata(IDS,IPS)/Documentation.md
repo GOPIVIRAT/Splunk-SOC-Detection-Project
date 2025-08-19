@@ -1,108 +1,114 @@
-**📂 Project: Network Threat Detection using Suricata and Splunk**
+***📂 Threat Detection using Suricata and Splunk***
+
 **🔎 Project Overview**
 
-In this project, I built a Network Intrusion Detection System (NIDS) using Suricata to capture and analyze malicious traffic, and integrated the logs into Splunk for monitoring and threat hunting.
-The goal was to simulate real-world attacker behavior (port scanning, brute force attacks, unauthorized access) and then create detection rules to alert on these activities.
+In this project, I built a Network Intrusion Detection System (NIDS) using Suricata on Linux to capture malicious traffic and forward logs into Splunk for centralized monitoring and analysis.
 
-This project demonstrates how network-based security monitoring complements host-based security to give a full SOC visibility.
+I then simulated multiple real-world attacker techniques across different stages of the attack lifecycle, such as:
 
-**⚙️ Lab Setup**
+🔍 Reconnaissance – Nmap scanning to identify open ports and services
 
-Attacker Machine: Kali Linux (used for nmap, hydra, etc.)
+🔑 Brute Force Attacks – SSH and RDP brute force attempts using Hydra
 
-Victim Machine: Ubuntu / Windows (running SSH & RDP services)
+📡 Exploitation – Attempted login success/failure tracking on SSH and RDP
 
-NIDS: Suricata (deployed on monitoring interface)
+🖥️ Lateral Movement – SMB/NetBIOS scans (ports 139, 445)
 
-SIEM: Splunk (receiving Suricata’s eve.json,fast.log logs)
+📥 Malware Delivery Simulation – downloading and executing suspicious files (benign test samples, not real malware)
 
+🌐 Web Application Attacks – SQL injection and XSS test payloads against a test web server
 
-**🛠️ Attack Simulations & Detections**
-1. Port Scanning with Nmap
+🔒 Defense Evasion – detecting abnormal traffic patterns like ICMP tunneling or suspicious large DNS queries
 
-**Attack:**
-Used nmap to discover open ports on the victim machine.
-**Example:**
+To validate detection, I wrote custom Suricata rules for each scenario and visualized alerts in Splunk.
+
+This project demonstrates the end-to-end SOC workflow:
+➡️ Attack simulation → Detection → Alerting → Investigation → Proof.
+
+🛠️ Step 1: Proof of Log Forwarding to Splunk
+
+First, I configured Suricata to forward its logs (eve.json,fast.log) into Splunk.
+This proves that Suricata can monitor traffic and send it to a SIEM for further detection and analysis.
+
+📸 [Add Screenshot: Suricata logs visible in Splunk]
+
+🛠️ Step 2: Port Scanning with Nmap
+
+As an attacker, I used Nmap to scan my victim machine for open ports.
+This simulates the reconnaissance phase of an attack.
+
+Example command:
 
 nmap -sS -p- <target-ip>
 
 
-**Detection:**
-Suricata rules detected suspicious connection attempts to multiple ports.
-Alerts were forwarded to Splunk and visualized as "Port Scan Detected".
+📸 [Add Screenshot: Nmap scan results showing open ports]
 
-Screenshots: all port scan find, scanning nmap, suricata rules.
+🛠️ Step 3: Writing Suricata Rules for Detection
 
-**2. SSH Brute Force Attack**
+Next, I wrote custom Suricata rules to detect scanning attempts on sensitive ports (22, 135, 139, 445, 3389, 5357).
 
-**Attack:**
-Used Hydra to brute force SSH login with a custom wordlist.
-**Example:**
+Example rule:
 
-hydra -l user -P passwords.txt ssh://<target-ip>
+alert tcp any any -> $HOME_NET 22 (msg:"SSH Port Scan Detected"; sid:100001; rev:1;)
+alert tcp any any -> $HOME_NET 445 (msg:"SMB Port Scan Detected"; sid:100002; rev:1;)
 
 
-**Detection:**
-Suricata custom rule was written to trigger on multiple SSH attempts.
-Logs in Splunk showed brute force alerts.
+📸 [Add Screenshot: Suricata rules created and loaded]
 
-Screenshots: bruteforce ssh, ssh failed, ssh login detection.
+🛠️ Step 4: Detection of Port Scan in Splunk
 
-**3. Successful SSH Access**
+After scanning, Suricata generated alerts for suspicious connections.
+Splunk ingested the logs, showing evidence of a port scan attack.
 
-**Attack:**
-After brute force, correct credentials were used to log in.
+📸 [Add Screenshot: Splunk alert showing port scan detection]
 
-**Detection:**
+🛠️ Step 5: SSH Brute Force Attack Simulation
 
-Suricata flagged SSH session initiation.
+Next, I simulated a brute force attack using Hydra against SSH on the victim.
 
-Windows Event Logs (ID 4624) confirmed successful login.
+Example command:
 
-Splunk correlation showed proof of compromise.
+hydra -l testuser -P passwords.txt ssh://<target-ip>
 
-Screenshots: login proof, password found ssh login, ssh accesss.
 
-**4. RDP Port Scan**
+📸 [Add Screenshot: Hydra brute force attempts in terminal]
 
-**Attack:**
-Scanned for exposed RDP ports (3389).
+🛠️ Step 6: Writing Suricata Rule for SSH Brute Force
 
-**Detection:**
-Suricata raised alerts for connections to sensitive service ports.
+To detect brute force activity, I created a Suricata rule for repeated SSH login attempts.
 
-Screenshots: port scan rdp.
+Example rule:
 
-**📊 Detection Engineering**
+alert tcp any any -> $HOME_NET 22 (msg:"SSH Brute Force Attempt"; flow:to_server,established; content:"SSH"; sid:100010; rev:1;)
 
-I wrote custom Suricata rules for detecting:
 
-Port scans on sensitive ports (22, 135, 139, 445, 3389, 5357).
+📸 [Add Screenshot: Rule added for SSH brute force]
 
-SSH brute force attempts.
+🛠️ Step 7: SSH Brute Force Detection in Splunk
 
-Unauthorized SSH access.
+Suricata generated alerts for brute force attempts, which were visible in Splunk.
 
-All alerts were forwarded to Splunk where I built dashboards and searches for attack detection, correlation, and investigation.
+📸 [Add Screenshot: Splunk alert for SSH brute force detection]
 
-**🔐 Key Skills Demonstrated**
+🛠️ Step 8: Proof of Login (Success or Failure)
 
-Network Intrusion Detection (Suricata)
+If credentials were wrong → multiple failed login attempts seen in Splunk.
 
-Log Forwarding & Parsing (eve.json,fast.log → Splunk)
+If credentials were correct → successful SSH login alert + system logs confirm access.
 
-Threat Hunting in Splunk
+📸 [Add Screenshot: Failed login + successful login proof]
 
-Writing IDS Rules (Suricata signatures)
+🔐 Skills Demonstrated
 
-Attack Simulation (Nmap, Hydra, SSH/RDP exploitation)
+Configuring Suricata IDS
 
-SOC Workflow (Detection → Investigation → Validation)
+Log forwarding to Splunk
 
-**🚀 Next Steps**
+Writing custom IDS rules
 
-Simulate web attacks (SQL Injection, XSS on DVWA).
+Simulating attacks (Nmap, Hydra brute force)
 
-Simulate malware infection using EICAR or Atomic Red Team.
+Detecting and validating alerts in Splunk
 
-Build correlation rules in Splunk (link host + network logs).
+End-to-end SOC workflow (attack → detection → investigation → proof)
