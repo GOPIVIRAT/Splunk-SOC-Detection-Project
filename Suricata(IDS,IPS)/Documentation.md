@@ -75,16 +75,16 @@ If credentials were wrong → multiple failed login attempts.
 <img width="1336" height="606" alt="Image" src="https://github.com/user-attachments/assets/31cb23e9-149d-462b-9d2e-bbc3e9b36577" /> 
 **Detection:**
 
+<img width="1299" height="426" alt="Image" src="https://github.com/user-attachments/assets/e8af6416-96bd-46e7-a685-e330f20007c2" /> 
 
 
-
-If credentials were correct → successful SSH login alert + system logs confirm access.
+If credentials were correct → successful SSH login confirm access linux.
 
 <img width="1366" height="662" alt="Image" src="https://github.com/user-attachments/assets/d54611a6-981c-41ec-959a-67065e59d435" /> 
 
 **🛠️ Step 8: Login detection in splunk**
 
-<img width="1301" height="231" alt="Image" src="https://github.com/user-attachments/assets/c50a6cd9-9c39-46ae-86b6-0a93c5f7bd3b" /> 
+<img width="1219" height="306" alt="Image" src="https://github.com/user-attachments/assets/03eb64c0-550c-4794-abf8-05f958152a0a" /> 
 
 
 **🔐 Skills Demonstrated**
