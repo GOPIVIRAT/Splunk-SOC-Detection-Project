@@ -42,7 +42,7 @@ This simulates the reconnaissance phase of an attack.
 
 **🛠️ Step 3: Writing Suricata Rules for Detection**
 
-<img width="1366" height="662" alt="Image" src="https://github.com/user-attachments/assets/ca7517c0-a8e8-4407-a05a-a842dc5f360d" />
+<img width="1293" height="449" alt="Image" src="https://github.com/user-attachments/assets/4f1500fa-4a1e-434d-9c9f-8e3228f0aa3f" />
 
 
 **🛠️ Step 4: Detection of Port Scan in Splunk**
