@@ -42,8 +42,6 @@ Example command:
 nmap -sS -p- <target-ip>
 
 
-📸 [Add Screenshot: Nmap scan results showing open ports]
-
 🛠️ Step 3: Writing Suricata Rules for Detection
 
 Next, I wrote custom Suricata rules to detect scanning attempts on sensitive ports (22, 135, 139, 445, 3389, 5357).
