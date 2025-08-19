@@ -4,7 +4,7 @@
 
 In this project, I built a Network Intrusion Detection System (NIDS) using Suricata on Linux to capture malicious traffic and forward logs into Splunk for centralized monitoring and analysis.
 
-I then simulated multiple real-world attacker techniques across different stages of the attack lifecycle, such as:
+ Then i simulated multiple real-world attacker techniques across different stages of the attack lifecycle, such as:
 
 🔍 Reconnaissance – Nmap scanning to identify open ports and services
 
@@ -23,81 +23,71 @@ I then simulated multiple real-world attacker techniques across different stages
 To validate detection, I wrote custom Suricata rules for each scenario and visualized alerts in Splunk.
 
 This project demonstrates the end-to-end SOC workflow:
-➡️ Attack simulation → Detection → Alerting → Investigation → Proof.
 
-🛠️ Step 1: Proof of Log Forwarding to Splunk
+**➡️ Attack simulation → Detection → Alerting → Investigation → Proof.**
+
+**🛠️ Step 1: Proof of Log Forwarding to Splunk**
 
 First, I configured Suricata to forward its logs (eve.json,fast.log) into Splunk.
 This proves that Suricata can monitor traffic and send it to a SIEM for further detection and analysis.
 
-📸 [Add Screenshot: Suricata logs visible in Splunk]
+<img width="1282" height="490" alt="Image" src="https://github.com/user-attachments/assets/452939af-0555-4ec9-88c2-ef5725b4b6c1" /> 
 
-🛠️ Step 2: Port Scanning with Nmap
+**🛠️ Step 2: Port Scanning with Nmap**
 
 As an attacker, I used Nmap to scan my victim machine for open ports.
 This simulates the reconnaissance phase of an attack.
 
-Example command:
-
-nmap -sS -p- <target-ip>
 
 
-🛠️ Step 3: Writing Suricata Rules for Detection
+**🛠️ Step 3: Writing Suricata Rules for Detection**
 
-Next, I wrote custom Suricata rules to detect scanning attempts on sensitive ports (22, 135, 139, 445, 3389, 5357).
-
-Example rule:
-
-alert tcp any any -> $HOME_NET 22 (msg:"SSH Port Scan Detected"; sid:100001; rev:1;)
-alert tcp any any -> $HOME_NET 445 (msg:"SMB Port Scan Detected"; sid:100002; rev:1;)
+<img width="1366" height="662" alt="Image" src="https://github.com/user-attachments/assets/ca7517c0-a8e8-4407-a05a-a842dc5f360d" />
 
 
-📸 [Add Screenshot: Suricata rules created and loaded]
-
-🛠️ Step 4: Detection of Port Scan in Splunk
+**🛠️ Step 4: Detection of Port Scan in Splunk**
 
 After scanning, Suricata generated alerts for suspicious connections.
 Splunk ingested the logs, showing evidence of a port scan attack.
 
-📸 [Add Screenshot: Splunk alert showing port scan detection]
+<img width="1283" height="618" alt="Image" src="https://github.com/user-attachments/assets/155c0f64-a2ad-4390-8b16-78f7bbce1745" /> find ports alert 
 
-🛠️ Step 5: SSH Brute Force Attack Simulation
+<img width="854" height="534" alt="Image" src="https://github.com/user-attachments/assets/19ec1e72-74de-461c-a1e9-f03c8a825228" /> rdp port scan
+
+
+**🛠️ Step 5: SSH Brute Force Attack Simulation**
 
 Next, I simulated a brute force attack using Hydra against SSH on the victim.
 
-Example command:
-
-hydra -l testuser -P passwords.txt ssh://<target-ip>
+<img width="1336" height="606" alt="Image" src="https://github.com/user-attachments/assets/31cb23e9-149d-462b-9d2e-bbc3e9b36577" /> 
 
 
-📸 [Add Screenshot: Hydra brute force attempts in terminal]
-
-🛠️ Step 6: Writing Suricata Rule for SSH Brute Force
-
-To detect brute force activity, I created a Suricata rule for repeated SSH login attempts.
-
-Example rule:
-
-alert tcp any any -> $HOME_NET 22 (msg:"SSH Brute Force Attempt"; flow:to_server,established; content:"SSH"; sid:100010; rev:1;)
-
-
-📸 [Add Screenshot: Rule added for SSH brute force]
-
-🛠️ Step 7: SSH Brute Force Detection in Splunk
+**🛠️ Step 6: SSH Brute Force Detection in Splunk**
 
 Suricata generated alerts for brute force attempts, which were visible in Splunk.
 
-📸 [Add Screenshot: Splunk alert for SSH brute force detection]
+<img width="1304" height="640" alt="Image" src="https://github.com/user-attachments/assets/11f8881c-deee-4199-adb7-1abbac8d1505" /> 
 
-🛠️ Step 8: Proof of Login (Success or Failure)
+**🛠️ Step 7: Proof of Login (Success or Failure)**
 
-If credentials were wrong → multiple failed login attempts seen in Splunk.
+If credentials were wrong → multiple failed login attempts.
+
+<img width="1336" height="606" alt="Image" src="https://github.com/user-attachments/assets/31cb23e9-149d-462b-9d2e-bbc3e9b36577" /> 
+**Detection:**
+
+
+
 
 If credentials were correct → successful SSH login alert + system logs confirm access.
 
-📸 [Add Screenshot: Failed login + successful login proof]
+<img width="1366" height="662" alt="Image" src="https://github.com/user-attachments/assets/d54611a6-981c-41ec-959a-67065e59d435" /> 
 
-🔐 Skills Demonstrated
+**🛠️ Step 8: Login detection in splunk**
+
+<img width="1301" height="231" alt="Image" src="https://github.com/user-attachments/assets/c50a6cd9-9c39-46ae-86b6-0a93c5f7bd3b" /> 
+
+
+**🔐 Skills Demonstrated**
 
 Configuring Suricata IDS
 
