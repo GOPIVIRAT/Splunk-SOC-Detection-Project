@@ -38,7 +38,7 @@ This proves that Suricata can monitor traffic and send it to a SIEM for further 
 As an attacker, I used Nmap to scan my victim machine for open ports.
 This simulates the reconnaissance phase of an attack.
 
-
+<img width="710" height="251" alt="Image" src="https://github.com/user-attachments/assets/13e42b55-a693-4a58-8c85-c2e80bedbc5d" />
 
 **🛠️ Step 3: Writing Suricata Rules for Detection**
 
