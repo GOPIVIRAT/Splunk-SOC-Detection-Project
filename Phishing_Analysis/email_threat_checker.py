@@ -9,9 +9,9 @@ from email.parser import BytesParser
 
 # === Configuration ===
 IMAP_SERVER = "imap.gmail.com"
-EMAIL_ACCOUNT = "gopisiddamsetty@gmail.com"
-EMAIL_PASSWORD = "wdpa laqy rpyf uavw"
-VIRUSTOTAL_API_KEY = "49de7eeaa064446a3a9bc36ea84eaf874be1b6154ec69a98c5ec5ddac9a944a2"
+EMAIL_ACCOUNT = "your@gmail.com"
+EMAIL_PASSWORD = "app password"
+VIRUSTOTAL_API_KEY = "Enter your key"
 
 def connect_to_email():
     mail = imaplib.IMAP4_SSL(IMAP_SERVER)
@@ -108,3 +108,4 @@ def process_emails():
 # === Run
 if __name__ == "__main__":
     process_emails()
+
