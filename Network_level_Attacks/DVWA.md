@@ -1,106 +1,155 @@
-**🛡️ Security Operations Project: Detecting Web Attacks with Splunk**
-**1. Project Overview**
+DVWA Attack Simulation & Detection Using Splunk and Wireshark
+1. Project Overview
 
-This project demonstrates how different types of web application attacks can be simulated on DVWA (Damn Vulnerable Web Application) and then detected in Splunk through log analysis.
+In this project, I set up Damn Vulnerable Web Application (DVWA) on a Kali Linux environment to simulate common web application attacks.
+The goal was:
 
-**The documentation covers:**
+To perform real-world style attacks.
 
-Attack execution (with screenshots).
+To capture logs and network traffic for detection.
 
-Captured logs in Splunk.
+To analyze attacks using Splunk and Wireshark.
 
-Detection queries and dashboards.
+To recommend defensive measures against each attack.
 
-Future extension with real-world datasets.
+This project demonstrates both the attacker’s perspective and the defender’s perspective, making it highly relevant for a SOC Analyst role.
 
-**Lab Setup:**
+2. Lab Setup
 
-DVWA running on Apache (local VM).
+Attacker Machine: Kali Linux
 
-Splunk Enterprise with Universal Forwarder for log ingestion.
+Target Application: DVWA (Damn Vulnerable Web Application)
 
-Wireshark for traffic observation.
+Monitoring Tools:
 
-**2. Attack Scenarios**
-**2.1 Brute Force Attack**
+Splunk → For log collection & analysis
 
-Attack Performed: Multiple login attempts with different credentials.
+Wireshark → For packet capture & traffic analysis
 
-Screenshot 1: DVWA brute force login page with repeated attempts.
+All attack attempts were logged and analyzed to validate detections.
 
-Screenshot 2: Splunk search showing multiple login attempts from the same IP.
+3. Attacks Performed & Analysis
+3.1 Brute Force Attack
 
-Splunk Detection Query:
+Description:
+Attempted repeated login attempts on DVWA using weak/default credentials.
 
-index=dvwa sourcetype=access_combined "vulnerabilities/brute"
-| stats count by clientip, uri_path 
-| where count > 5
+Detection in Splunk:
 
+Multiple failed login attempts within a short time.
 
-Detection Logic: Flags brute force attempts when >5 login tries are made by the same IP.
+HTTP status codes like 401 (Unauthorized) followed by a 200 (Successful login).
 
-**2.2 SQL Injection (SQLi)**
+Source IP repeatedly targeting the login endpoint (/dvwa/login.php).
 
-Attack Performed: Injected payloads such as ' OR '1'='1 into login fields.
+Detection in Wireshark:
 
-Screenshot 1: DVWA login field with SQLi payload.
+Observed repeated HTTP POST requests with different username/password combinations.
 
-Screenshot 2: Splunk query highlighting suspicious parameters in logs.
+Mitigation Recommendations:
 
-**Splunk Detection Query:**
+Implement account lockout after multiple failed attempts.
 
-index=dvwa sourcetype=access_combined 
-(uri_query="*' OR*" OR uri_query="*1=1*") 
-| stats count by clientip, uri_query
+Enforce strong password policies.
 
+Enable multi-factor authentication (MFA).
 
-Detection Logic: Detects requests containing SQL injection keywords.
+Use WAF rules to detect abnormal login attempts.
 
-**2.3 Cross-Site Scripting (XSS)**
+3.2 Command Injection
 
-Attack Performed: Injected <script>alert('xss')</script> into input fields.
+Description:
+Injected OS commands into DVWA’s vulnerable form (e.g., ; ls, ; ping -c 4 127.0.0.1).
 
-Screenshot 1: DVWA input box with XSS payload.
+Detection in Splunk:
 
-Screenshot 2: Splunk logs showing <script> injection attempts.
+Suspicious GET/POST requests with shell commands embedded.
 
-**Splunk Detection Query:**
+HTTP response 200 OK but abnormal request URIs or parameters.
 
-index=dvwa sourcetype=access_combined 
-(uri_query="*<script>*" OR uri_query="*alert(*") 
-| stats count by clientip, uri_query
+Detection in Wireshark:
 
+Outbound ICMP packets triggered by injected ping command.
 
-Detection Logic: Flags attempts to inject malicious JavaScript.
+Traffic anomaly that would not normally occur during web browsing.
 
-**2.4 Command Injection**
+Mitigation Recommendations:
 
-Attack Performed: Payloads like ; ls -la or && cat /etc/passwd were used.
+Validate and sanitize all user inputs.
 
-Screenshot 1: DVWA command execution page with payload.
+Restrict system calls in web applications.
 
-Screenshot 2: Splunk logs highlighting suspicious shell characters.
+Deploy Web Application Firewall (WAF) rules for command injection.
 
-**Splunk Detection Query:**
+3.3 SQL Injection
 
-index=dvwa sourcetype=access_combined 
-(uri_query="*;*" OR uri_query="*&&*") 
-| stats count by clientip, uri_query
+Description:
+Attempted to bypass login and extract data using payloads like ' OR '1'='1.
 
+Detection in Splunk:
 
-Detection Logic: Identifies attempts to inject system commands.
+SQL-related error messages in responses.
 
+Repeated access to parameters like id=1 OR 1=1.
 
-6. Conclusion
+Sudden increase in database query execution logs.
 
-This project demonstrates a full SOC analyst workflow:
+Detection in Wireshark:
 
-Simulated attacks (Brute Force, SQL Injection, XSS, Command Injection).
+Repeated crafted requests with SQL keywords (UNION, SELECT, OR).
 
-Collected and analyzed logs in Splunk.
+Mitigation Recommendations:
 
-Built custom SPL queries and dashboards for detection.
+Use parameterized queries (prepared statements).
 
-Planned extension into real-world data for greater realism.
+Sanitize and validate all inputs.
 
-Next Step (Phase 2): Incorporate industry-recognized attack datasets to build a more advanced SOC detection portfolio.
+Monitor for abnormal database query patterns.
+
+3.4 Cross-Site Scripting (XSS)
+
+Description:
+Injected malicious JavaScript into form fields (e.g., <script>alert("XSS")</script>).
+
+Detection in Splunk:
+
+Logs showing script tags <script> in request parameters.
+
+Unusual encoding/decoding patterns.
+
+Detection in Wireshark:
+
+HTTP responses containing injected JavaScript payloads.
+
+Mitigation Recommendations:
+
+Apply input sanitization and output encoding.
+
+Implement Content Security Policy (CSP).
+
+Use frameworks with built-in XSS protection.
+
+4. Defender’s Perspective
+
+After analyzing all attacks, I documented the attack patterns, detection methods, and defensive recommendations.
+This provides a roadmap for improving the organization’s web application security posture.
+
+5. Key Outcomes
+
+Successfully simulated Brute Force, Command Injection, SQL Injection, and XSS attacks.
+
+Validated attack evidence using Splunk & Wireshark.
+
+Recommended actionable defense strategies for each attack.
+
+6. Future Scope
+
+Expand detections by integrating Suricata IDS into Splunk.
+
+Automate detection with SOAR (Security Orchestration, Automation, and Response).
+
+Include alerting and dashboarding for faster incident response.
+
+7. Screenshots
+
+(Insert screenshots of attack execution, Splunk logs, and Wireshark captures here)
