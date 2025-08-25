@@ -90,6 +90,23 @@ Restrict system calls in web applications.
 
 Deploy Web Application Firewall (WAF) rules for command injection.
 
+
+**3.2 Command Injection**
+
+**Description:**
+Injected OS commands into DVWA’s vulnerable form (e.g., ; ls, ; ping -c 4 127.0.0.1).
+<img width="1254" height="377" alt="Image" src="https://github.com/user-attachments/assets/e7df10b0-d565-476b-b965-b67051f3fc8c" />
+
+**Detection in Wireshark:**
+
+Outbound ICMP packets triggered by injected ping command.
+
+Traffic anomaly that would not normally occur during web browsing.
+
+<img width="1366" height="662" alt="Image" src="https://github.com/user-attachments/assets/6f81aea3-01b2-4d84-bf4c-7f9f4787cb16" />
+
+<img width="1366" height="662" alt="Image" src="https://github.com/user-attachments/assets/4ecca92e-fe16-42f2-8a4e-5fa2155cafd1" />
+
 **3.3 SQL Injection**
 
 **Description:**
