@@ -1,4 +1,4 @@
-# Splunk-SOC-Detection-Project
+# Splunk-SOC-Detection and Automation-Project
 
 In this project, I performed the role of a SOC Analyst, simulating real-world attacks, detecting them using Splunk, Suricata, and Sysmon, and building automated response workflows.
 The project covers host-level attacks, network-level intrusions, phishing analysis, and custom Splunk detection rules, along with playbooks for automated response.
