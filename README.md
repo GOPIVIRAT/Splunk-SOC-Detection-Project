@@ -16,6 +16,7 @@ The project covers host-level attacks, network-level intrusions, phishing analys
 **📘Splunk_Rules/** → Developed custom SPL rules and correlation searches to reduce investigation time, mapped them to the MITRE ATT&CK framework for better threat coverage.
 
 **📘Study_material/** → Notes, references, and research material I used throughout the project — helpful for SOC analyst learning and continuous improvement.
-**
+
+**📘n8n(SOAR)/**-->Designed automated incident response workflows in n8n, starting with SSH-based actions  triggered directly from Splunk alerts. This proves end-to-end SOAR automation, and in the future, the same framework can be extended to include advanced playbooks like (e.g., disabling users, blocking IPs)firewall rule updates, ticketing system integration, showcasing strong knowledge of real-world SOAR operations.
 
 **📘Active_Directory/** → Basic understanding and setup notes for Windows AD; no project yet, but kept for future extension if time permits.
