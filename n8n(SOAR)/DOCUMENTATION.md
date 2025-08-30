@@ -18,5 +18,7 @@ To enhance incident response efficiency, I integrated Suricata IDS with Splunk f
 <img width="1074" height="458" alt="image" src="https://github.com/user-attachments/assets/ef88f567-85c0-4604-bf7c-e1a2536129b2" />
 
 **Phishing Analysis - URLScan.io and VirusTotal**
+
+
 <img width="1068" height="405" alt="image" src="https://github.com/user-attachments/assets/15ed8c0e-647a-4db3-a35e-b8999b817db8" />
 
