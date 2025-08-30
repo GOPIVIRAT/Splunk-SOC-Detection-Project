@@ -16,5 +16,6 @@ The project covers host-level attacks, network-level intrusions, phishing analys
 **📘Splunk_Rules/** → Developed custom SPL rules and correlation searches to reduce investigation time, mapped them to the MITRE ATT&CK framework for better threat coverage.
 
 **📘Study_material/** → Notes, references, and research material I used throughout the project — helpful for SOC analyst learning and continuous improvement.
+**
 
-**Active_Directory/** → Basic understanding and setup notes for Windows AD; no project yet, but kept for future extension if time permits.
+**📘Active_Directory/** → Basic understanding and setup notes for Windows AD; no project yet, but kept for future extension if time permits.
