@@ -32,7 +32,7 @@ All attack attempts were logged and analyzed to validate detections.
 **3.1 Brute Force Attack**
 
 **Description:**
-Attempted repeated login attempts on DVWA using weak/default credentials.
+Attempted repeated login attempts on DVWA and then using hydra tool brute forcing on Login page.
 <img width="1366" height="662" alt="Image" src="https://github.com/user-attachments/assets/e0a53286-f0d9-4960-8811-b27edd959174" /> 
 <img width="1327" height="279" alt="Image" src="https://github.com/user-attachments/assets/5b76d306-07c8-4d2a-a016-6f61d1baad80" /> 
 
@@ -67,7 +67,7 @@ Use WAF rules to detect abnormal login attempts.
 **3.2 Command Injection**
 
 **Description:**
-Injected OS commands into DVWA’s vulnerable form (e.g., ; ls, ; ping -c 4 127.0.0.1).
+Injected OS commands into DVWA’s vulnerable form (e.g., ; ls, ; ping -c 4 127.0.0.1,cat etc/passwd).
 <img width="1366" height="662" alt="Image" src="https://github.com/user-attachments/assets/831a9fd1-88ab-41c0-b40e-d69b2eab9093" /> 
 
 
@@ -120,12 +120,12 @@ Traffic anomaly that would not normally occur during web browsing.
 **3.3 SQL Injection**
 
 **Description:**
-Attempted to bypass login and extract data using payloads like ' OR '1'='1.
+Attempted to bypass login and extract data using payloads like ' OR '1'='1 ,UNION SELECT from user PASSWORD from users like these.
 <img width="1366" height="662" alt="Image" src="https://github.com/user-attachments/assets/5d731bf3-542a-45c5-b419-8f452f5662a2" /> 
 
 **Detection in Wireshark:**
 
-Repeated crafted requests with SQL keywords (UNION, SELECT, OR).
+Repeated crafted requests with SQL keywords (UNION, SELECT, OR etc..).
 
 <img width="1366" height="662" alt="Image" src="https://github.com/user-attachments/assets/953fafa2-e22f-4d0c-b243-e031b05150fc" />
 <img width="1085" height="405" alt="Image" src="https://github.com/user-attachments/assets/39ea61e6-2dda-4454-a7be-265fa9382979" /> 
