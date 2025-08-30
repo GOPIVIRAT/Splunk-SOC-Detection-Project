@@ -176,6 +176,59 @@ Apply input sanitization and output encoding.
 Implement Content Security Policy (CSP).
 
 Use frameworks with built-in XSS protection.
+**Suricata Rules**
+**🔹 1. Detect Any HTTP Request**
+alert http any any -> any any (msg:"HTTP Request Detected"; flow:to_server,established; http.method; sid:100001; rev:1;)
+
+
+Purpose: Triggers on any HTTP request.
+Use case: Good for testing Suricata setup.
+
+**🔹 2. Detect Access to /admin Page**
+alert http any any -> any any (msg:"Attempt to Access /admin Page"; flow:to_server,established; http.uri; content:"/admin"; nocase; sid:100002; rev:1;)
+
+
+Purpose: Detects if someone tries to access /admin path.
+Use case: Common attack target for brute force or privilege escalation.
+
+**🔹 3. Detect SQL Injection Attempt**
+alert http any any -> any any (msg:"SQL Injection Attempt"; flow:to_server,established; content:"' OR 1=1 --"; nocase; http.request_body; sid:100003; rev:1;)
+
+
+Purpose: Flags potential SQLi strings in HTTP request body.
+Use case: Helps identify malicious input in forms.
+
+**🔹 4. Detect Command Injection (; cat /etc/passwd)**
+alert http any any -> any any (msg:"Command Injection Attempt"; flow:to_server,established; content:"; cat /etc/passwd"; nocase; http.request_body; sid:100004; rev:1;)
+
+
+Purpose: Detects attempts to read sensitive system files.
+Use case: Command injection attacks in vulnerable apps.
+
+**🔹 5. Detect Suspicious User-Agent (like “sqlmap”)**
+alert http any any -> any any (msg:"SQLMap User-Agent Detected"; flow:to_server,established; http.user_agent; content:"sqlmap"; nocase; sid:100005; rev:1;)
+
+
+Purpose: Catches automated attack tools.
+Use case: Attackers using scanners like sqlmap.
+
+**🔹 6. Detect SSH Brute Force (Multiple Failed Attempts)**
+alert tcp any any -> any 22 (msg:"SSH Brute Force Attempt"; flow:to_server,established; detection_filter:track by_src, count 5, seconds 60; sid:100006; rev:1;)
+
+
+Purpose: If the same source tries 5 connections to SSH in 60s → triggers.
+Use case: Detect brute force on SSH service.
+
+**🔹 7. Detect Malware File Download (e.g., .exe)**
+alert http any any -> any any (msg:"Executable File Download"; flow:to_client,established; fileext:"exe"; sid:100007; rev:1;)
+
+
+Purpose: Detects downloads of .exe files.
+Use case: Malware delivery over HTTP.
+
+**🔹 8. Detect DNS Query to Suspicious Domain**
+alert dns any any -> any any (msg:"Suspicious DNS Query - knownmalicious.com"; dns.query; content:"knownmalicious.com"; nocase; sid:100008; rev:1;)
+
 
 **4. Defender’s Perspective**
 
