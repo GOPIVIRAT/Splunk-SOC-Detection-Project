@@ -3,7 +3,8 @@
 In this project, I performed the role of a SOC Analyst, simulating real-world attacks, detecting them using Splunk, Suricata, and Sysmon, and building automated response workflows.
 The project covers host-level attacks, network-level intrusions, phishing analysis, and custom Splunk detection rules, along with playbooks for automated response.
 
-<img width="1118" height="515" alt="Image" src="https://github.com/user-attachments/assets/94ee82f4-e774-47a0-821f-a7091dede076" />
+<img width="1584" height="672" alt="splunk final project overview image" src="https://github.com/user-attachments/assets/357fd28c-e063-4379-b17a-9da581ba250c" />
+
 
 📂 Repository Structure
 
